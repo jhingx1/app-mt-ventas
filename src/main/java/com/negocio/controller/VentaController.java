@@ -17,54 +17,55 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.negocio.exception.ModeloNotFoundException;
-import com.negocio.model.Persona;
-import com.negocio.service.IPersonaService;
+import com.negocio.model.Venta;
+import com.negocio.service.IVentaService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/personas")
-public class PersonaController {
+@RequestMapping("/ventas")
+public class VentaController {
 	
 	@Autowired
-	private IPersonaService service;
+	private IVentaService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Persona>> listar() throws Exception{
-		List<Persona> lista = service.listar();
-		return new ResponseEntity<List<Persona>>(lista, HttpStatus.OK);		
+	public ResponseEntity<List<Venta>> listar() throws Exception{
+		List<Venta> lista = service.listar();
+		return new ResponseEntity<List<Venta>>(lista, HttpStatus.OK);		
 	}
 	
 	@GetMapping("/{id}")//nota: lo intercepta debido a que tiene : throws Exception
-	public ResponseEntity<Persona> listarPorId(@PathVariable("id") Integer id) throws Exception{
-		Persona pac = service.listarPorId(id);
+	public ResponseEntity<Venta> listarPorId(@PathVariable("id") Integer id) throws Exception{
+		Venta pac = service.listarPorId(id);
 		
 		if(pac == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);//excepcion propia
 		}
 		
-		return new ResponseEntity<Persona>(pac, HttpStatus.OK);
+		return new ResponseEntity<Venta>(pac, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Persona> registrar(@Valid @RequestBody Persona p) throws Exception{
-//		Persona pac = service.registrar(p);
-//		return new ResponseEntity<Persona>(pac, HttpStatus.CREATED);
-		Persona obj = service.registrar(p);
+	public ResponseEntity<Venta> registrar(@Valid @RequestBody Venta p) throws Exception{
+//		Venta pac = service.registrar(p);
+//		return new ResponseEntity<Venta>(pac, HttpStatus.CREATED);
+		//Venta obj = service.registrar(p);
+		Venta obj = service.registrarTransaccional(p);
 		
 		// localhost:8080/pacientes/2
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdPersona()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdVenta()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 	
 	@PutMapping
-	public ResponseEntity<Persona> modificar(@Valid @RequestBody Persona p) throws Exception{
-		Persona pac = service.modificar(p);
-		return new ResponseEntity<Persona>(pac, HttpStatus.OK);
+	public ResponseEntity<Venta> modificar(@Valid @RequestBody Venta p) throws Exception{
+		Venta pac = service.modificar(p);
+		return new ResponseEntity<Venta>(pac, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminar(@PathVariable("id") Integer id) throws Exception{
-		Persona pac = service.listarPorId(id);
+		Venta pac = service.listarPorId(id);
 		if(pac == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);
 		}

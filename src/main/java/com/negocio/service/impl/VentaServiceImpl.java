@@ -3,20 +3,30 @@ package com.negocio.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.negocio.model.Persona;
+import com.negocio.model.Venta;
 import com.negocio.repo.IGenericRepo;
-import com.negocio.repo.IPersonaRepo;
-import com.negocio.service.IPersonaService;
+import com.negocio.repo.IVentaRepo;
+import com.negocio.service.IVentaService;
 
 @Service
-public class PersonaServiceImpl extends CRUDImpl<Persona, Integer> implements IPersonaService{
+public class VentaServiceImpl extends CRUDImpl<Venta, Integer> implements IVentaService{
 	
 	@Autowired
-	private IPersonaRepo repo;
+	private IVentaRepo repo;
 	
 	@Override
-	protected IGenericRepo<Persona, Integer> getRepo() {		
+	protected IGenericRepo<Venta, Integer> getRepo() {		
 		return repo;
+	}
+
+	@Override
+	public Venta registrarTransaccional(Venta venta) {
+		//INSERTAR CONSULTA -> OBTENER PK
+		//INSERTER DETALLE CONSULTA <- USANDO LA PK PREVIA
+		
+		venta.getDetalleVenta().forEach(det -> det.setVenta(venta));
+		
+		return repo.save(venta);
 	}
 	
 //	@Override

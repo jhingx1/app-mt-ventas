@@ -1,5 +1,6 @@
 package com.negocio.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class DetalleVenta {
 	@JoinColumn(name = "id_producto", nullable = false, foreignKey = @ForeignKey(name = "Fk_detalle_producto"))
 	private Producto producto;
 	
+	@Column(name = "cantidad")
 	private int cantidad;
 	
 	public Integer getIdDetalleVenta() {
