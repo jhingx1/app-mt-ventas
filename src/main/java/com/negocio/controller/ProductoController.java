@@ -1,5 +1,6 @@
 package com.negocio.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.negocio.exception.ModeloNotFoundException;
+import com.negocio.model.Persona;
 import com.negocio.model.Producto;
 import com.negocio.service.IProductoService;
 
@@ -46,8 +49,15 @@ public class ProductoController {
 	
 	@PostMapping
 	public ResponseEntity<Producto> registrar(@Valid @RequestBody Producto p) throws Exception{
-		Producto pac = service.registrar(p);
-		return new ResponseEntity<Producto>(pac, HttpStatus.CREATED);
+//		Producto pac = service.registrar(p);
+//		return new ResponseEntity<Producto>(pac, HttpStatus.CREATED);
+		
+		Producto obj = service.registrar(p);
+		
+		// localhost:8080/pacientes/2
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdProducto()).toUri();
+		return ResponseEntity.created(location).build();
+		
 	}
 	
 	@PutMapping
