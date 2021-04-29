@@ -15,49 +15,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.negocio.exception.ModeloNotFoundException;
-import com.negocio.model.Persona;
-import com.negocio.service.IPersonaService;
+import com.negocio.model.Producto;
+import com.negocio.service.IProductoService;
+
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/personas")
-public class PersonaController {
+@RequestMapping("/productos")
+public class ProductoController {
 	
 	@Autowired
-	private IPersonaService service;
+	private IProductoService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Persona>> listar() throws Exception{
-		List<Persona> lista = service.listar();
-		return new ResponseEntity<List<Persona>>(lista, HttpStatus.OK);		
+	public ResponseEntity<List<Producto>> listar() throws Exception{
+		List<Producto> lista = service.listar();
+		return new ResponseEntity<List<Producto>>(lista, HttpStatus.OK);		
 	}
 	
 	@GetMapping("/{id}")//nota: lo intercepta debido a que tiene : throws Exception
-	public ResponseEntity<Persona> listarPorId(@PathVariable("id") Integer id) throws Exception{
-		Persona pac = service.listarPorId(id);
+	public ResponseEntity<Producto> listarPorId(@PathVariable("id") Integer id) throws Exception{
+		Producto pac = service.listarPorId(id);
 		
 		if(pac == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);//excepcion propia
 		}
 		
-		return new ResponseEntity<Persona>(pac, HttpStatus.OK);
+		return new ResponseEntity<Producto>(pac, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Persona> registrar(@Valid @RequestBody Persona p) throws Exception{
-		Persona pac = service.registrar(p);
-		return new ResponseEntity<Persona>(pac, HttpStatus.CREATED);
+	public ResponseEntity<Producto> registrar(@Valid @RequestBody Producto p) throws Exception{
+		Producto pac = service.registrar(p);
+		return new ResponseEntity<Producto>(pac, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<Persona> modificar(@Valid @RequestBody Persona p) throws Exception{
-		Persona pac = service.modificar(p);
-		return new ResponseEntity<Persona>(pac, HttpStatus.OK);
+	public ResponseEntity<Producto> modificar(@Valid @RequestBody Producto p) throws Exception{
+		Producto pac = service.modificar(p);
+		return new ResponseEntity<Producto>(pac, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminar(@PathVariable("id") Integer id) throws Exception{
-		Persona pac = service.listarPorId(id);
+		Producto pac = service.listarPorId(id);
 		if(pac == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);
 		}
